@@ -12,11 +12,14 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('handlebars', 'Precompile Handlebars template', function() {
     var self = this;
+    var config = this.option ? this.option() : this.data;
+
     var done = self.async();
     var templateDir = this.file.src;
     var truncateFileCmd = '> ' +this.file.dest;
+    var rootDir = config.root;
 
-    var handlebarsCmd = __dirname + '/../node_modules/.bin/handlebars -m ' + templateDir + '/*.handlebars -f ' + this.file.dest;
+    var handlebarsCmd = __dirname + '/../node_modules/.bin/handlebars ' + (rootDir ? '-r ' + rootDir + ' ' : '') + '-m ' + templateDir + '/*.handlebars -f ' + this.file.dest;
 
     // Check on which platform node is running.
     var finalCmd;
