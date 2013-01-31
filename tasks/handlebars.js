@@ -17,9 +17,13 @@ module.exports = function(grunt) {
     var done = self.async();
     var templateDir = this.file.src;
     var truncateFileCmd = '> ' +this.file.dest;
-    var rootDir = config.root;
+    var rootDir = config.root || '';
 
-    var handlebarsCmd = __dirname + '/../node_modules/.bin/handlebars ' + (rootDir ? '-r ' + rootDir + ' ' : '') + '-m ' + templateDir + '/*.handlebars -f ' + this.file.dest;
+    var handlebarsCmd = __dirname + '/../node_modules/.bin/handlebars';
+    var rootFlag = rootDir.length ? '-r ' + rootDir + ' ' : '';
+    var inputFlag = '-m ' + [rootDir, templateDir+'/*.handlebars'].join(' ');
+    var outputFlag = '-f ' + this.file.dest;
+    handlebarsCmd = [handlebarsCmd, rootFlag, inputFlag, outputFlag].join(' ');
 
     // Check on which platform node is running.
     var finalCmd;
@@ -40,3 +44,5 @@ module.exports = function(grunt) {
     });
   });
 };
+
+
